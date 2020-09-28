@@ -8,30 +8,31 @@
 #include <dirent.h>
 #include <string.h>
 
-void cd_m(char** res)
+void	cd_m(char **res)
 {
 	chdir(res[1]);
 }
 
-void ls_m(char** res) 
+void	ls_m(char **res)
 {
-	DIR *dp;
-	struct dirent *d;
+	DIR				*dp;
+	struct dirent	*d;
 
-	dp=opendir(".");
-	d=readdir(dp);
-	while(d!=NULL)
+	dp = opendir(".");
+	d = readdir(dp);
+	while (d != NULL)
 	{
 		printf("%s\n", d->d_name);
-		d=readdir(dp);
+		d = readdir(dp);
 	}
-	return 0;
+	return (0);
 }
 
-int main(void) 
+int		main(void)
 { 
 	char name[100], in[50], * res[20] = { 0 };
 	int i;
+
 	while (1) 
 	{
 		getcwd(name, 99);
