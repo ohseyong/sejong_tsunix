@@ -33,25 +33,23 @@ void	ls_m(char **res)
 {
 	DIR				*dp;
 	struct dirent	*d;
-	struct stat		*buf;
+	struct stat		buf;
 
 	dp = opendir(".");
-	d = readdir(dp);
-	while (d != NULL)
+	while ((d = readdir(dp)))
 	{
-		stat(d->d_name, buf);
-		if (S_ISREG(buf->st_mode))
+		stat(d->d_name, &buf);
+		if (S_ISREG(buf.st_mode))
 			printf("F ");
-		else if (S_ISDIR(buf->st_mode))
+		else if (S_ISDIR(buf.st_mode))
 			printf("D ");
 
-		printf("%o ", buf->st_mode&0777);
-		printf("%d ", buf->st_nlink);
-		printf("%d ", buf->st_uid);
-		printf("%d ", buf->st_gid);
-		printf("%lld %s ", buf->st_size, ctime(&buf->st_mtime));
+		printf("0%o ", (unsigned int)buf.st_mode&0777);
+		printf("%d ", (unsigned int)buf.st_nlink);
+		printf("%d ", (int)buf.st_uid);
+		printf("%d ", (int)buf.st_gid);
+		printf("%d %s", (int)buf.st_size, ctime(&buf.st_mtime));
 		printf("%s\n", d->d_name);
-		d = readdir(dp);
 	}
 }
 
