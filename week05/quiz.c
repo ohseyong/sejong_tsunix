@@ -32,7 +32,7 @@ void rm_m(char **res)
 			{
 				cnt++;
 			}
-			printf("%s has %d files or directories", d1->d_name, cnt);
+			printf("%s has %d files or directories\n", d1->d_name, cnt-2);
 		}
 		stat(d1->d_name, &s);
 	}
