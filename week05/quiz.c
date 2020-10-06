@@ -57,7 +57,7 @@ int main(void)
 			i++;
 			res[i] = strtok(NULL, " ");
 		}
-		if (!strcmp(res[0], "rm"))
+		if (!strcmp(res[0], "rmall"))
 		{
 			rm_m(res);
 		}
