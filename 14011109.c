@@ -16,53 +16,32 @@
 #include <sys/sem.h>
 #include <sys/shm.h>
 
-struct stud{
-	int no, id;
-	char name[20];
-	double score;
-};
-
-void vi_m(char **res)
-{
-	struct stud buf;
-	int fd;
-
-	open(res[1], O_RDWR | O_CREAT, 0644);
-	scanf("%d", &buf.no);
-	getchar();
-	while(buf.no > 0)
-	{
-		//나머지 정보 입력, scanf 사용 가능
-		//순번 위치에 입력내용 저장
-		scanf("%d", &buf.no);
-		getchar();
-	}
-	lseek(fd, 0, SEEK_SET);
-	write(1, res, 99);
-}
-
 int main(void)
 {
-	char in[50], *res[20]={0};
-	int i;
+	char name[100], in[50], *res[20] = {0};
+	int i, status;
+	pid_t pid;
 	while (1)
 	{
-		printf("> ");
+		getcwd(name,100);
+		printf("%s> ",name);
 		gets(in);
-		if (!strcmp(in, ""))
-		   continue;
+		if (in[0] == '\0')
+			continue;
 		i = 0;
-	    res[i] = strtok(in, " ");
+		res[i] = strtok(in, " ");
 		while (res[i])
 		{
-			i++;
-			res[i] = strtok(NULL, " ");
+			res[++i] = strtok(NULL, " ");
 		}
-		if (!strcmp(res[0], "vi"))
+		if (strcmp(res[0], "exit") == 0)
 		{
-			vi_m(res);
+			exit(0);
 		}
 		else
-			exit(0);
+		{
+			execv(in, res);
+		}
 	}
+	return 0;
 }
