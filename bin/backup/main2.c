@@ -44,13 +44,8 @@ void	do_cp_m(char *argv[])
 void	do_cd_m(char *argv[])
 {
 	printf("yo\n");
-	execv("./cd_m", argv);
-	exit (0);
-}
-
-void	do_rm_m(char *argv[])
-{
-	execv("./rm_m", argv);
+	//execv("./cd_m", argv);
+	exec("./cd_m", argv);
 	exit (0);
 }
 
@@ -81,51 +76,39 @@ int	main(void)
 		}
 		else if (strcmp(res[0], "ls_m") == 0)
 		{
-			if ((pid = fork()) == 0)
+			pid = fork();
+			if (pid == 0)
 				do_ls_m();
-			else if (pid >0)
-				wait(&status);
 		}
 		else if (strcmp(res[0], "cat_m") == 0)
 		{
 			char *argv[] = {"./cat_m", res[1]};
-			if ((pid = fork()) == 0)
+			pid = fork();
+			if (pid == 0)
 				do_cat_m(argv);
-			else if (pid >0)
-				wait(&status);
 		}
 		else if (strcmp(res[0], "mkdir_m") == 0)
 		{
 			char *argv[] = {"./mkdir_m", res[1]};
-			if ((pid = fork()) == 0)
+			pid = fork();
+			if (pid == 0)
 				do_mkdir_m(argv);
-			else if (pid >0)
-				wait(&status);
 		}
 		else if (strcmp(res[0], "cp_m") == 0)
 		{
 			char *argv[] = {"./cp_m", res[1], res[2]};
-			if ((pid = fork()) == 0)
+			pid = fork();
+			if (pid == 0)
 				do_cp_m(argv);
-			else if (pid >0)
-				wait(&status);
 		}
 		else if (strcmp(res[0], "cd_m") == 0)
 		{
 			char *argv[] = {"./cd_m", res[1]};
-			if ((pid = fork()) == 0)
+			pid = fork();
+			if (pid == 0)
 				do_cd_m(argv);
-			else if (pid > 0 )
-				wait(&status);
 		}
-		else if (strcmp(res[0], "rm_m") == 0)
-		{
-			char *argv[] = {"./rm_m", res[1]};
-			if ((pid = fork()) == 0)
-				do_rm_m(argv);
-			else if (pid > 0 )
-				wait(&status);
-		}
+		wait (0);
 	}
 	return (0);
 }
