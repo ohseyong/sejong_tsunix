@@ -16,6 +16,18 @@
 #include<sys/sem.h>
 #include<sys/shm.h>
 
+int		find_space(char *res)
+{
+	int result = 0;
+
+	while (*res++)
+	{
+		if (*res == ' ')
+			result++;
+	}
+	return (result);
+}
+
 void	do_ls_m(void)
 {
 	char *argv[] = {0};
@@ -41,16 +53,20 @@ void	do_cp_m(char *argv[])
 	exit (0);
 }
 
-void	do_cd_m(char *argv[])
+void	do_cd_m(char *path)
 {
-	printf("yo\n");
-	execv("./cd_m", argv);
-	exit (0);
+	chdir(path);
 }
 
 void	do_rm_m(char *argv[])
 {
 	execv("./rm_m", argv);
+	exit (0);
+}
+
+void	do_res_m(char *res[])
+{	
+	execv(res[0], res);
 	exit (0);
 }
 
@@ -62,6 +78,8 @@ int	main(void)
 	int	i;
 	int	status;
 	pid_t	pid;
+	int		space_count;
+
 	while (1)
 	{
 		getcwd(name, 99);
@@ -69,6 +87,7 @@ int	main(void)
 		gets(in);
 		if (in[0] == '\0')
 			continue;
+		space_count = find_space(in);
 		i = 0;
 		res[i] = strtok(in, " ");
 		while (res[i])
@@ -79,6 +98,7 @@ int	main(void)
 		{
 			exit(0);
 		}
+
 		else if (strcmp(res[0], "ls_m") == 0)
 		{
 			if ((pid = fork()) == 0)
@@ -86,6 +106,7 @@ int	main(void)
 			else if (pid >0)
 				wait(&status);
 		}
+		
 		else if (strcmp(res[0], "cat_m") == 0)
 		{
 			char *argv[] = {"./cat_m", res[1]};
@@ -94,6 +115,7 @@ int	main(void)
 			else if (pid >0)
 				wait(&status);
 		}
+		
 		else if (strcmp(res[0], "mkdir_m") == 0)
 		{
 			char *argv[] = {"./mkdir_m", res[1]};
@@ -102,6 +124,7 @@ int	main(void)
 			else if (pid >0)
 				wait(&status);
 		}
+		
 		else if (strcmp(res[0], "cp_m") == 0)
 		{
 			char *argv[] = {"./cp_m", res[1], res[2]};
@@ -110,19 +133,24 @@ int	main(void)
 			else if (pid >0)
 				wait(&status);
 		}
+		
 		else if (strcmp(res[0], "cd_m") == 0)
 		{
-			char *argv[] = {"./cd_m", res[1]};
-			if ((pid = fork()) == 0)
-				do_cd_m(argv);
-			else if (pid > 0 )
-				wait(&status);
+			do_cd_m(res[1]);
 		}
+		
 		else if (strcmp(res[0], "rm_m") == 0)
 		{
 			char *argv[] = {"./rm_m", res[1]};
 			if ((pid = fork()) == 0)
 				do_rm_m(argv);
+			else if (pid > 0 )
+				wait(&status);
+		}
+		else if (strlen(res[0]) > 0)
+		{
+			if ((pid = fork()) == 0)
+				do_res_m(res);
 			else if (pid > 0 )
 				wait(&status);
 		}
