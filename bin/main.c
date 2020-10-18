@@ -16,17 +16,6 @@
 #include<sys/sem.h>
 #include<sys/shm.h>
 
-int		find_space(char *res)
-{
-	int result = 0;
-
-	while (*res++)
-	{
-		if (*res == ' ')
-			result++;
-	}
-	return (result);
-}
 
 void	do_ls_m(void)
 {
