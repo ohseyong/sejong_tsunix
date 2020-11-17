@@ -94,7 +94,6 @@ int	main(void)
 		gets(in);
 		if (in[0] == '\0')
 			continue;
-		space_count = find_space(in);
 		i = 0;
 		res[i] = strtok(in, " ");
 		while (res[i])
